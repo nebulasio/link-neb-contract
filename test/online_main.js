@@ -35,7 +35,7 @@ class LinkTest {
         await MultiSig._deploy([callerAddr])
         await Link._deploy(ConfigManager.getOnlineContractAddress(MultiSig))
         await LinkProxy._deploy(ConfigManager.getOnlineContractAddress(MultiSig))
-        await USDToken._deploy('nUSD', 'nUSD',18, ConfigManager.getOnlineContractAddress(MultiSig))
+        await USDToken._deploy('nUSDT', 'nUSDT',18, ConfigManager.getOnlineContractAddress(MultiSig))
     }
 
     async setConfig() {
@@ -46,15 +46,16 @@ class LinkTest {
                 'linkProxy': ConfigManager.getOnlineContractAddress(LinkProxy),
                 'assetManagers': [callerAddr],
                 'dataManagers': [callerAddr],
+                'tax': callerAddr,
                 'tokens': {
-                    'nUSD': ConfigManager.getOnlineContractAddress(USDToken),
+                    'nUSDT': ConfigManager.getOnlineContractAddress(USDToken),
                 }
 
             },
             contractList: {
                 'link': ConfigManager.getOnlineContractAddress(Link),
                 'linkProxy': ConfigManager.getOnlineContractAddress(LinkProxy),
-                'nUSD': ConfigManager.getOnlineContractAddress(USDToken),
+                'nUSDT': ConfigManager.getOnlineContractAddress(USDToken),
             }
         }
 
@@ -64,18 +65,18 @@ class LinkTest {
 
     async stake(ethAddr, value) {
         await USDToken._setAccount(TestKeys.otherKeys[0]).approve(ConfigManager.getOnlineContractAddress(LinkProxy), '0', value)
-        await LinkProxy._setAccount(TestKeys.otherKeys[0]).stake('nUSD', ethAddr, value)
+        await LinkProxy._setAccount(TestKeys.otherKeys[0]).stake('nUSDT', ethAddr, value)
     }
 
     async refund(ethAddr, value) {
-        await LinkProxy.refund('nUSD', ethAddr, TestKeys.otherKeys[0].getAddressString(), value)
+        await LinkProxy.refund('nUSDT', ethAddr, TestKeys.otherKeys[0].getAddressString(), value)
     }
 }
 
 async function main() {
     let link = new LinkTest()
-    // await link.deploy()
-    // await link.setConfig()
+    await link.deploy()
+    await link.setConfig()
     TestUtils.log('config', await MultiSig.getConfigTest())
 }
 

@@ -17,7 +17,7 @@ getMappingAccount(addr)
  * 
  * @param {*} 
  * {
- *  'token':支持代币类型，当前为nUSD
+ *  'token':支持代币类型，当前为nUSDT
  *  'ethAddr': 以太地址,不填为之前绑定地址，输入后覆盖之前地址，@optional
  *  'amount': 转账金额，转账前需保证，地址向合约approve足够的资金
  * }
@@ -33,13 +33,14 @@ stake(token, ethAddr, amount)
  * @param {*} 
  * 
  * {
- *  'token':支持代币类型，当前为nUSD
+ *  'token':支持代币类型，当前为nUSDT
  *  'ethAddr': 以太地址,
  *  'nebAddr': 星云地址
  *  'amount': 转账金额，
+ *  'taxFee': 手续费
  * }
  */
-refund(token, ethAddr, nebAddr, amount)
+refund(token, ethAddr, nebAddr, amount, taxFee)
 ```
 
 ### 5. 销毁跨链转账资金

@@ -434,7 +434,7 @@ class Link extends BaseContract {
         return id
     }
 
-    refund(token, ethAddr, nebAddr, amount) {
+    refund(token, ethAddr, nebAddr, amount, taxFee) {
         this._verifyFromLinkProxy()
         this._verifyEthAddress(ethAddr)
 
@@ -445,6 +445,7 @@ class Link extends BaseContract {
             nebAddr: nebAddr,
             ethAddr: ethAddr,
             amount: amount,
+            taxFee: taxFee,
             timestamp: Blockchain.block.timestamp
         }
         this._refunds.setData(id, data)

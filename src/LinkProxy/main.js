@@ -207,25 +207,32 @@ class LinkProxy extends BaseContract {
         });
     }
 
-    refund(token, ethAddr, nebAddr, amount) {
+    refund(token, ethAddr, nebAddr, amount, taxFee) {
         this._verifyFromAssetManager()
 
-        let refundId = this.linkContract.call('refund', token, ethAddr, nebAddr, amount)
+        if (new BigNumber(amount).lte(taxFee)) {
+            throw new Error('insufficient amount to refund')
+        }
+
+        let refundId = this.linkContract.call('refund', token, ethAddr, nebAddr, amount, taxFee)
 
         let tokenContract = this._tokenContract(token)
-        tokenContract.call('issue', [{addr: nebAddr, value: amount}])
-        this._refundEvent(token, ethAddr, nebAddr, amount)
+        let taxAddr = this.config.tax
+        amount = new BigNumber(amount).sub(taxFee).toString(10)
+        tokenContract.call('issue', [{addr: nebAddr, value: amount}, {addr: taxAddr, value: taxFee}])
+        this._refundEvent(token, ethAddr, nebAddr, amount, taxFee)
         return refundId
     }
 
-    _refundEvent(token, from, to, amount) {
+    _refundEvent(token, from, to, amount, taxFee) {
         Event.Trigger('Link', {
             Status: true,
             Refund: {
                 token: token,
                 from: from,
                 to: to,
-                value: amount
+                value: amount,
+                taxFee: taxFee
             }
         });
     }

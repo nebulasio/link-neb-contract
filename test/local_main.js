@@ -22,7 +22,7 @@ class LinkTest {
         MultiSig._deploy([callerAddr])
         Link._deploy(LocalContext.getContractAddress(MultiSig))
         LinkProxy._deploy(LocalContext.getContractAddress(MultiSig))
-        USDToken._deploy('nUSD', 'nUSD',18, LocalContext.getContractAddress(MultiSig))
+        USDToken._deploy('nUSDT', 'nUSDT',18, LocalContext.getContractAddress(MultiSig))
     }
 
     setConfig() {
@@ -33,15 +33,16 @@ class LinkTest {
                 'linkProxy': LocalContext.getContractAddress(LinkProxy),
                 'assetManagers': [callerAddr],
                 'dataManagers': [callerAddr],
+                'tax': callerAddr,
                 'tokens': {
-                    'nUSD': LocalContext.getContractAddress(USDToken),
+                    'nUSDT': LocalContext.getContractAddress(USDToken),
                 }
 
             },
             contractList: {
                 'link': LocalContext.getContractAddress(Link),
                 'linkProxy': LocalContext.getContractAddress(LinkProxy),
-                'nUSD': LocalContext.getContractAddress(USDToken),
+                'nUSDT': LocalContext.getContractAddress(USDToken),
             }
         }
 
@@ -50,13 +51,13 @@ class LinkTest {
 
     stake(ethAddr, value) {
         USDToken._setAccount(TestKeys.otherKeys[0]).approve(LocalContext.getContractAddress(LinkProxy), '0', value)
-        LinkProxy._setAccount(TestKeys.otherKeys[0]).stake('nUSD', ethAddr, value)
+        LinkProxy._setAccount(TestKeys.otherKeys[0]).stake('nUSDT', ethAddr, value)
         TestUtils.log('addr balance', USDToken.balanceOf(TestKeys.otherKeys[0].getAddressString()))
         TestUtils.log('contract balance', USDToken.balanceOf(LocalContext.getContractAddress(LinkProxy)))
     }
 
     refund(ethAddr, value) {
-        LinkProxy.refund('nUSD', ethAddr, TestKeys.otherKeys[0].getAddressString(), value)
+        LinkProxy.refund('nUSDT', ethAddr, TestKeys.otherKeys[0].getAddressString(), value, '0')
         TestUtils.log('balance', USDToken.balanceOf(TestKeys.otherKeys[0].getAddressString()))
     }
 }
