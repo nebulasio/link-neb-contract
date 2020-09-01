@@ -328,21 +328,16 @@ class BaseContract {
         return this.__config
     }
 
-    set config(config) {
-        this.__config = config
-        this._config = config
-    }
-
     init(multiSig) {
         this._verifyAddress(multiSig)
-        this.config = {
+        this._config = {
             multiSig: multiSig
         }
     }
 
     setConfig(config) {
         this._verifyFromMultiSig()
-        this.config = config
+        this._config = config
     }
 
     getConfig() {
