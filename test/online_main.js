@@ -5,6 +5,8 @@ const LinkProxy = require('./contracts/LinkProxy/online.js').testnet
 const LinkProxyMainnet = require('./contracts/LinkProxy/online.js').mainnet
 const MultiSig = require('./contracts/MultiSig/online.js').testnet
 const MultiSigMainnet = require('./contracts/MultiSig/online.js').mainnet
+const MultiSigNew = require('./contracts/MultiSigNew/online.js').testnet
+const MultiSigNewMainnet = require('./contracts/MultiSigNew/online.js').mainnet
 const USDToken = require('./contracts/USDToken/online.js').testnet
 const USDTokenMainnet = require('./contracts/USDToken/online.js').mainnet
 /** Automatically generated code; End. */
@@ -35,7 +37,7 @@ class LinkTest {
         await MultiSig._deploy([callerAddr])
         await Link._deploy(ConfigManager.getOnlineContractAddress(MultiSig))
         await LinkProxy._deploy(ConfigManager.getOnlineContractAddress(MultiSig))
-        await USDToken._deploy('nUSDT', 'nUSDT',18, ConfigManager.getOnlineContractAddress(MultiSig))
+        await USDToken._deploy('nUSDT', 'nUSDT',6, ConfigManager.getOnlineContractAddress(MultiSig))
     }
 
     async setConfig() {
@@ -75,8 +77,8 @@ class LinkTest {
 
 async function main() {
     let link = new LinkTest()
-    await link.deploy()
-    await link.setConfig()
+    // await link.deploy()
+    // await link.setConfig()
     TestUtils.log('config', await MultiSig.getConfigTest())
 }
 

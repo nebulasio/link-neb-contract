@@ -173,31 +173,26 @@ class LinkProxy extends BaseContract {
         });
     }
 
-    destoryStake(key, tax) {
+    burnStake(key) {
         this._verifyFromAssetManager()
 
         let data = this.getStakeData(key)
         if (utils.isNull(data)) {
-            throw new Error(`Destory stake not found: ${key}`)
+            throw new Error(`Burn stake not found: ${key}`)
         }
 
-        if (new BigNumber(tax).gt(data.amount)) {
-            throw new Error('tax bigger than destory amount')
-        }
-
-        const value = new BigNumber(data.amount).sub(tax).toString(10)
-        this._tokenContract(data.token).call('destory', [{addr:data.nebAddr, value: value}])
-        this._destoryEvent(data.token, data.nebAddr, value, tax)
+        const value = new BigNumber(data.amount).toString(10)
+        this._tokenContract(data.token).call('burn', [{addr:data.nebAddr, value: value}])
+        this._burnEvent(data.token, data.nebAddr, value)
     }
 
-    _destoryEvent(token, addr, amount, tax) {
+    _burnEvent(token, addr, amount) {
         Event.Trigger('Link', {
             Status: true,
-            Destory: {
+            Burn: {
                 token: token,
                 address: addr,
-                value: amount,
-                tax: tax
+                value: amount
             }
         });
     }
@@ -214,7 +209,7 @@ class LinkProxy extends BaseContract {
         let tokenContract = this._tokenContract(token)
         let taxAddr = this.config.tax
         amount = new BigNumber(amount).sub(taxFee).toString(10)
-        tokenContract.call('issue', [{addr: nebAddr, value: amount}, {addr: taxAddr, value: taxFee}])
+        tokenContract.call('mint', [{addr: nebAddr, value: amount}, {addr: taxAddr, value: taxFee}])
         this._refundEvent(token, ethAddr, nebAddr, amount, taxFee)
         return refundId
     }

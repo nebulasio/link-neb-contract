@@ -150,9 +150,9 @@ USDToken.prototype = {
         }
     },
 
-    _verifyAssetIssue: function() {
+    _verifyAssetMint: function() {
         if (this._config.linkProxy !== Blockchain.transaction.from) {
-            throw new Error("Permission Denied for issue!");
+            throw new Error("Permission Denied for mint!");
         }
     },
 
@@ -185,11 +185,11 @@ USDToken.prototype = {
         return this._blacklist;
     },
 
-    issue: function(data) {
-        this._verifyAssetIssue();
+    mint: function(data) {
+        this._verifyAssetMint();
 
         if (!(data instanceof Array)) {
-            throw new Error("Issue data format error.")
+            throw new Error("mint data format error.")
         }
 
         let total = new BigNumber(0);
@@ -205,24 +205,24 @@ USDToken.prototype = {
             this._balances.set(item.addr, balance);
         }
         this._totalSupply = this._totalSupply.plus(total);
-        this._issueEvent(true, this._totalSupply, data);
+        this._mintEvent(true, this._totalSupply, data);
     },
 
-    _issueEvent: function (status, total, data) {
+    _mintEvent: function (status, total, data) {
         Event.Trigger(this.name(), {
             Status: status,
-            Issue: {
+            Mint: {
                 total: total.toString(10),
                 data: data
             }
         });
     },
 
-    destory: function(data) {
-        this._verifyAssetIssue();
+    burn: function(data) {
+        this._verifyAssetMint();
 
         if (!(data instanceof Array)) {
-            throw new Error("Destory data format error.")
+            throw new Error("burn data format error.")
         }
 
         let total = new BigNumber(0);
@@ -238,17 +238,17 @@ USDToken.prototype = {
                 balance = balance.sub(item.value);
                 this._balances.set(item.addr, balance);
             } else {
-                throw new Error('destory failed with:' + item.addr);
+                throw new Error('burn failed with:' + item.addr);
             }
         }
         this._totalSupply = this._totalSupply.sub(total);
-        this._destoryEvent(true, this._totalSupply, data);
+        this._burnEvent(true, this._totalSupply, data);
     },
 
-    _destoryEvent: function (status, total, data) {
+    _burnEvent: function (status, total, data) {
         Event.Trigger(this.name(), {
             Status: status,
-            Destory: {
+            Burn: {
                 total: total.toString(10),
                 data: data
             }

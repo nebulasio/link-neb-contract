@@ -2,6 +2,7 @@
 const Link = require('./contracts/Link/local.js')
 const LinkProxy = require('./contracts/LinkProxy/local.js')
 const MultiSig = require('./contracts/MultiSig/local.js')
+const MultiSigNew = require('./contracts/MultiSigNew/local.js')
 const USDToken = require('./contracts/USDToken/local.js')
 /** Automatically generated code; End. */
 
@@ -22,7 +23,7 @@ class LinkTest {
         MultiSig._deploy([callerAddr])
         Link._deploy(LocalContext.getContractAddress(MultiSig))
         LinkProxy._deploy(LocalContext.getContractAddress(MultiSig))
-        USDToken._deploy('nUSDT', 'nUSDT',18, LocalContext.getContractAddress(MultiSig))
+        USDToken._deploy('nUSDT', 'nUSDT',6, LocalContext.getContractAddress(MultiSig))
     }
 
     setConfig() {

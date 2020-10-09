@@ -49,10 +49,9 @@ refund(token, ethAddr, nebAddr, amount, taxFee)
  * @param {*}
  * {
  *  'stakeId': 质押ID，
- *  'tax': 跨链转账手续费
  * }
  */
-destoryStake(stakeId, tax)
+burnStake(stakeId)
 ```
 
 ### 6. 查询质押记录
