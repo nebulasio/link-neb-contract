@@ -77,9 +77,9 @@ class LinkTest {
 
 async function main() {
     let link = new LinkTest()
-    // await link.deploy()
-    // await link.setConfig()
-    TestUtils.log('config', await MultiSig.getConfigTest())
+    await link.deploy()
+    await link.setConfig()
+    // TestUtils.log('config', await MultiSig.getConfigTest())
 }
 
 main()

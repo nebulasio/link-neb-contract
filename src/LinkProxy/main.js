@@ -177,7 +177,7 @@ class LinkProxy extends BaseContract {
         this._verifyFromAssetManager()
 
         let data = this.getStakeData(key)
-        if (utils.isNull(data)) {
+        if (Utils.isNull(data)) {
             throw new Error(`Burn stake not found: ${key}`)
         }
 
